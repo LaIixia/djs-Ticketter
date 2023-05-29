@@ -47,7 +47,7 @@ client.on("interactionCreate", async (interaction) => {
           },
           {
             id: interaction.user.id,
-            allow: ["VIEW_CHANNEL"],
+            allow: ["VIEW_CHANNEL","SEND_MESSAGES"],
           },
         ],
       })
