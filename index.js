@@ -35,7 +35,7 @@ client.on("interactionCreate", async (interaction) => {
       .setDescription(
         "チケットを作成しました。削除する場合は下のボタンを押してください"
       );
-    const name = interaction.user.username;
+    const name = interaction.user.tag;
     const mid = Math.floor(Math.random() * 1000);
     await interaction.guild.channels
       .create(`${name}` + "-" + `${mid}`, {
