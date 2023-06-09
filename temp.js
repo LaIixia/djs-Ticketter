@@ -33,8 +33,15 @@ client.on("interactionCreate", async (interaction) => {
             .setCustomId("delete")
             .setStyle("DANGER")
             .setLabel("削除");
+        
         const name = "チケット" + `${interaction.user.id}`;
+       const str = await interaction.guild.channels.cache.find((ch) => ch.name === `${name}`)
+       if (str = name) return await interaction.followup({
+                    content:"作成済",
+                    ephemeral: true,
+                });
         //let mid = Math.floor(Math.random() * 1000);
+        
         await interaction.guild.channels
             .create(`${name}`, {
                 reason: `Created By : ${interaction.user.username}`,
@@ -65,15 +72,8 @@ client.on("interactionCreate", async (interaction) => {
             .setDescription(
                 "チケットを作成しました。削除する場合は下のボタンを押してください"
         );
-        //探す
-        const channel = await interaction.guild.channels.cache.find((ch) => ch.name === `${name}`)
-        //チャンネル名同じ=> return
-        if (channel == name ) return await interaction.reply({
-            content:"作成済です。",
-            ephemeral: true,
-        });
         //探して送る
-        channel.send({
+         await interaction.guild.channels.cache.find((ch) => ch.name === `${name}`).send({
             embeds: [embed],
             components: [new Discord.MessageActionRow().addComponents(del)],
         });
