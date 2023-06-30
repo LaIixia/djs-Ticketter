@@ -1,92 +1,69 @@
-//チケットボタンを表示
 client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isCommand()) {
-        return;
-    }
-    /*if (!interaction.member.permissions.has("ADMINISTRATOR"))
-     return interaction.reply({
-       content: "このコマンドを使うには以下の権限が必要です。\n```管理者権限```",
-       ephemeral: true,
-     });*/
-    if (interaction.commandName === "ticket") {
-        const cre = new Discord.MessageButton()
-            .setCustomId("create")
-            .setStyle("PRIMARY")
-            .setLabel("チケットを作成する");
-        const embed1 = new Discord.MessageEmbed()
-            .setColor("BLUE")
-            .setDescription("チケットを作成するには下のボタンを押してください");
+  if (interaction.customId === "create") {
+    await interaction.reply({
+      content: "作成しました",
+      ephemeral: true,
+    });
+    const name = "チケット" + "-" + `${interaction.user.id}`;
+    if (interaction.guild.channels.cache.find((tic) => tic.name === `${name}`))
+      return await interaction.reply({
+        content: `既に作成済です\nhttps://discord.com/channels/${
+          interaction.guild.id
+        }/${
+          interaction.guild.channels.cache.find((tic) => tic.name === `${name}`)
+            .id
+        }`,
+        ephemeral: true,
+      });
+    await interaction.guild.channels
+      .create(`${name}`, {
+        reason: `Created By : ${interaction.user.username}`,
+        permissionOverwrites: [
+          {
+            id: interaction.guild.roles.everyone,
+            deny: ["VIEW_CHANNEL"],
+          },
+          {
+            id: interaction.user.id,
+            allow: ["VIEW_CHANNEL", "SEND_MESSAGES"],
+          },
+          {
+            id: client.user.id,
+            allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
+          },
+        ],
+      })
+      .catch(async (error) => {
         await interaction.reply({
-            embeds: [embed1],
-            components: [new Discord.MessageActionRow().addComponents(cre)],
+          content:
+            "このコマンドを使うにはボットに以下の権限が必要です。\n```チャンネルの管理```",
+          ephemeral: true,
         });
-    }
-});
-//チケットを作成
-client.on("interactionCreate", async (interaction) => {
-    if (interaction.customId === "create") {
-        await interaction.reply({
-            content: "作成しました",
-            ephemeral: true,
-        });
+      });
+    const embed = new Discord.MessageEmbed()
+      .setColor("BLUE")
+      .setDescription(
+        "チケットを作成しました。削除する場合は下のボタンを押してください"
+      );
         const del = new Discord.MessageButton()
-            .setCustomId("delete")
-            .setStyle("DANGER")
-            .setLabel("削除");
-        
-        const name = "チケット" + `${interaction.user.id}`;
-       const str = await interaction.guild.channels.cache.find((ch) => ch.name === `${name}`)
-       if (str = name) return await interaction.followup({
-                    content:"作成済",
-                    ephemeral: true,
-                });
-        //let mid = Math.floor(Math.random() * 1000);
-        
-        await interaction.guild.channels
-            .create(`${name}`, {
-                reason: `Created By : ${interaction.user.username}`,
-                permissionOverwrites: [
-                    {
-                        id: interaction.guild.roles.everyone,
-                        deny: ["VIEW_CHANNEL"],
-                    },
-                    {
-                        id: interaction.user.id,
-                        allow: ["VIEW_CHANNEL", "SEND_MESSAGES"],
-                    },
-                    {
-                        id: client.user.id,
-                        allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
-                    },
-                ],
-            })
-            .catch(async (error) => {
-                await interaction.reply({
-                    content:
-                        "このコマンドを使うにはボットに以下の権限が必要です。\n```チャンネルの管理```",
-                    ephemeral: true,
-                });
-            });
-        const embed = new Discord.MessageEmbed()
-            .setColor("BLUE")
-            .setDescription(
-                "チケットを作成しました。削除する場合は下のボタンを押してください"
-        );
-        //探して送る
-         await interaction.guild.channels.cache.find((ch) => ch.name === `${name}`).send({
-            embeds: [embed],
-            components: [new Discord.MessageActionRow().addComponents(del)],
-        });
-    }
-    //チケットを削除
-    if (interaction.customId === "delete") {
-        const cid = interaction.channel.id;
-        await interaction.guild.channels.delete(`${cid}`).catch(async (error) => {
-            await interaction.reply({
-                content:
-                    "このコマンドを使うにはボットに以下の権限が必要です。\n```チャンネルの管理```",
-                ephemeral: true,
-            });
-        });
-    }
+      .setCustomId("delete")
+      .setStyle("DANGER")
+      .setLabel("削除");
+    await interaction.guild.channels.cache
+      .find((ch) => ch.name === `${name}`)
+      .send({
+        embeds: [embed],
+        components: [new Discord.MessageActionRow().addComponents(del)],
+      });
+  }
+  if (interaction.customId === "delete") {
+    const cid = interaction.channel.id;
+    await interaction.channels.delete(`${cid}`).catch(async (error) => {
+      await interaction.reply({
+        content:
+          "このコマンドを使うにはボットに以下の権限が必要です。\n```チャンネルの管理```",
+        ephemeral: true,
+      });
+    });
+  }
 });
