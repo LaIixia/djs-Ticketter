@@ -44,14 +44,7 @@ client.on("interactionCreate", async (interaction) => {
           },
         ],
       })
-      .catch(async (error) => {
-        await interaction.reply({
-          content:
-            "このコマンドを使うにはボットに以下の権限が必要です。\n```チャンネルの管理```",
-          ephemeral: true,
-        });
-      });
-        await interaction.reply({
+    await interaction.reply({
       content: `作成しました\nhttps://discord.com/channels/${interaction.guild.id}/${interaction.guild.channels.cache.find((tic) => tic.name === `チケット-${mid}`).id }`,
       ephemeral: true,
     });
@@ -74,12 +67,5 @@ client.on("interactionCreate", async (interaction) => {
   if (interaction.customId === "delete") {
     await interaction.guild.channels
       .delete(`${interaction.channel.id}`)
-      .catch(async (error) => {
-        await interaction.reply({
-          content:
-            "このコマンドを使うにはボットに以下の権限が必要です。\n```チャンネルの管理```",
-          ephemeral: true,
-        });
-      });
   }
 });
