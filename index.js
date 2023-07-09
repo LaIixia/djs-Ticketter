@@ -13,6 +13,7 @@ client.on("interactionCreate", async (interaction) => {
     });
   }
 });
+
 client.on("interactionCreate", async (interaction) => {
   if (interaction.customId === "create") {
   const mid = `${interaction.user.id}`;
@@ -64,6 +65,7 @@ client.on("interactionCreate", async (interaction) => {
         components: [new Discord.MessageActionRow().addComponents(del)],
       });
   }
+
   if (interaction.customId === "delete") {
     await interaction.guild.channels
       .delete(`${interaction.channel.id}`)
