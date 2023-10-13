@@ -37,7 +37,7 @@ client.on("interactionCreate", async (interaction) => {
           },
           {
             id: interaction.user.id,
-            allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ATTACH_FILES"],
+            allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ATTACH_FILES","READ_MESSAGE_HISTORY"],
           },
           {
             id: client.user.id,
