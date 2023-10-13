@@ -16,7 +16,7 @@ client.on("interactionCreate", async (interaction) => {
 
 client.on("interactionCreate", async (interaction) => {
   if (interaction.customId === "create") {
-  const mid = `${interaction.user.id}`;
+  const mid = interaction.user.id;
     if (interaction.guild.channels.cache.find((tic) => tic.name === `チケット-${mid}`))
       return await interaction.reply({
         content: `既に作成済です\nhttps://discord.com/channels/${
